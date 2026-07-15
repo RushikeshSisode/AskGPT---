@@ -1,29 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
-import { assets } from "../assets/assets";
+import ChatInput from "./ChatInput";
+import EmptyState from "./EmptyState";
 import Message from "./Message";
+import TypingIndicator from "./TypingIndicator";
 import API_BASE_URL from "../config/apiBaseUrl";
 
 const ChatBox = () => {
-  const {
-    selectedChat,
-    setSelectedChat,
-    chats,
-    setChats,
-    theme,
-    createNewChat,
-  } = useAppContext();
-
+  const { selectedChat, setSelectedChat, setChats, createNewChat, user } = useAppContext();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("text");
   const [inputText, setInputText] = useState("");
   const [isPublished, setIsPublished] = useState(false);
-
   const bottomRef = useRef(null);
 
-  /* LOAD MESSAGES */
   useEffect(() => {
     if (selectedChat) {
       setMessages(selectedChat.messages || []);
@@ -32,22 +25,24 @@ const ChatBox = () => {
     }
   }, [selectedChat]);
 
-  /* AUTO SCROLL */
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
 
-  /* SEND MESSAGE */
-  const handleSend = async (e) => {
-    e.preventDefault();
+  const handleSuggestion = (suggestion) => {
+    setInputText(suggestion);
+  };
+
+  const handleSend = async (event) => {
+    event.preventDefault();
     if (!inputText.trim()) return;
+
     if (!selectedChat) {
       await createNewChat();
       return;
     }
 
     const token = localStorage.getItem("token");
-
     const userPrompt = inputText;
     const userMessage = {
       role: "user",
@@ -62,36 +57,22 @@ const ChatBox = () => {
 
     try {
       const url =
-       mode === "image"
-    ? `${API_BASE_URL}/api/chats/${selectedChat._id}/image`
-    : `${API_BASE_URL}/api/chats/${selectedChat._id}/message`;
-
-
-      const payload =
         mode === "image"
-          ? { prompt: userPrompt, isPublished }
-          : { prompt: userPrompt };
+          ? `${API_BASE_URL}/api/chats/${selectedChat._id}/image`
+          : `${API_BASE_URL}/api/chats/${selectedChat._id}/message`;
 
-      const res = await axios.post(url, payload, {
+      const payload = mode === "image" ? { prompt: userPrompt, isPublished } : { prompt: userPrompt };
+
+      const response = await axios.post(url, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (res.data.success) {
-        const reply = res.data.reply;
+      if (response.data.success) {
+        const reply = response.data.reply;
         setMessages((prev) => [...prev, reply]);
 
-        /* FRONTEND TITLE SYNC */
-        if (
-          selectedChat.chatname === "New Chat" &&
-          selectedChat.messages?.length === 0
-        ) {
-          const newTitle = userPrompt
-            .split(" ")
-            .slice(0, 6)
-            .join(" ")
-            .slice(0, 30);
-
-          // Update selectedChat
+        if (selectedChat.chatname === "New Chat" && selectedChat.messages?.length === 0) {
+          const newTitle = userPrompt.split(" ").slice(0, 6).join(" ").slice(0, 30);
           const updatedChat = {
             ...selectedChat,
             chatname: newTitle,
@@ -99,18 +80,20 @@ const ChatBox = () => {
           };
 
           setSelectedChat(updatedChat);
-
-          // Update sidebar chats
           setChats((prev) =>
-            prev.map((chat) =>
-              chat._id === selectedChat._id
-                ? { ...chat, chatname: newTitle }
-                : chat
-            )
+            prev.map((chat) => (chat._id === selectedChat._id ? { ...chat, chatname: newTitle } : chat))
           );
         }
       }
     } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        (mode === "image"
+          ? "Image generation failed. Please try again."
+          : "Text reply failed. Please try again.");
+
+      setMessages((prev) => prev.filter((message) => message.timestamp !== userMessage.timestamp));
+      toast.error(errorMessage);
       console.error("Message Send Error:", error?.response?.data || error.message);
     } finally {
       setLoading(false);
@@ -119,76 +102,57 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="p-5 h-screen flex flex-col text-black dark:text-white">
-      {/* CHAT AREA */}
-      <div className="flex-1 overflow-y-auto pr-2">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full opacity-70">
-            <img
-              src={theme === "dark" ? assets.logo_full : assets.logo_full_dark}
-              className="w-40 mb-4"
-              alt="AskVision"
-            />
-            <p className="text-lg font-medium">Ask me anything...</p>
+    <div className="flex h-full flex-col px-3 pb-3 pt-3 md:px-4 md:pb-4 md:pt-4">
+      <div className="glass-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-[32px]">
+        <div className="border-b border-white/8 px-5 py-4 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.22em] text-slate-500">
+                Workspace
+              </p>
+              <h2 className="mt-1 text-xl font-semibold text-white">
+                {selectedChat?.chatname || "New conversation"}
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-xs text-slate-400">
+              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              {loading ? "Generating response" : `Signed in as ${user?.name || "User"}`}
+            </div>
           </div>
-        )}
-
-        {messages.length > 0 && (
-          <div className="space-y-6">
-            {messages.map((msg, i) => (
-              <Message key={i} message={msg} />
-            ))}
-
-            {loading && (
-              <div className="flex items-start gap-3 my-4">
-                <div className="max-w-[75%] p-4 rounded-2xl bg-gray-100 dark:bg-white/10">
-                  <div className="flex gap-2">
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150" />
-                    <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-300" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-        <div ref={bottomRef} />
-      </div>
-
-      {/* INPUT */}
-      <form onSubmit={handleSend} className="mt-4 p-4 rounded-xl bg-gray-100 dark:bg-white/10">
-        <div className="flex gap-3 mb-3">
-          <button type="button" onClick={() => setMode("text")} className={mode === "text" ? "bg-blue-600 text-white px-4 py-1 rounded" : "px-4 py-1 bg-gray-300 rounded"}>
-            Text
-          </button>
-          <button type="button" onClick={() => setMode("image")} className={mode === "image" ? "bg-blue-600 text-white px-4 py-1 rounded" : "px-4 py-1 bg-gray-300 rounded"}>
-            Image
-          </button>
         </div>
 
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder={mode === "image" ? "Describe image..." : "Type message..."}
-          className="w-full p-3 rounded border bg-transparent"
-        />
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+          {messages.length === 0 ? (
+            <EmptyState onSelectSuggestion={handleSuggestion} />
+          ) : (
+            <div className="mx-auto flex w-full max-w-4xl flex-col gap-5">
+              {messages.map((message, index) => (
+                <Message key={`${message.timestamp}-${index}`} message={message} />
+              ))}
+              {loading && <TypingIndicator mode={mode} />}
+            </div>
+          )}
+          <div ref={bottomRef} />
+        </div>
 
-        {mode === "image" && (
-          <label className="flex gap-2 text-sm mt-2">
-            <input type="checkbox" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
-            Publish to community
-          </label>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading || !inputText.trim()}
-          className="mt-3 w-full py-2 bg-gradient-to-r from-[#A456F7] to-[#40B5F6] text-white rounded"
-        >
-          {mode === "image" ? "Generate Image" : "Send Message"}
-        </button>
-      </form>
+        <div className="border-t border-white/8 bg-slate-950/40 px-4 py-4 sm:px-6">
+          <div className="mx-auto w-full max-w-4xl">
+            <form onSubmit={handleSend}>
+              <ChatInput
+                value={inputText}
+                onChange={setInputText}
+                onSubmit={handleSend}
+                disabled={loading}
+                mode={mode}
+                setMode={setMode}
+                isPublished={isPublished}
+                setIsPublished={setIsPublished}
+              />
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useAppContext } from "../context/AppContext";
 
@@ -9,20 +9,19 @@ const Login = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (event) => {
+    const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
-    let result;
-    if (state === "login") {
-      result = await loginUser(formData.email, formData.password);
-    } else {
-      result = await registerUser(formData.name, formData.email, formData.password);
-    }
+    const result =
+      state === "login"
+        ? await loginUser(formData.email, formData.password)
+        : await registerUser(formData.name, formData.email, formData.password);
+
     setLoading(false);
     if (!result.success) {
       toast.error(result.message || "Something went wrong");
@@ -32,30 +31,52 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-100 px-4">
+    <div className="flex min-h-screen items-center justify-center px-4 py-10">
+      <div className="grid w-full max-w-6xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="glass-panel hidden rounded-[36px] p-8 lg:flex lg:flex-col lg:justify-between">
+          <div>
+            <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium uppercase tracking-[0.24em] text-slate-300">
+              AskGPT
+            </span>
+            <h1 className="mt-8 max-w-lg text-5xl font-semibold tracking-tight text-white">
+              AI conversations built for focused work.
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-8 text-slate-400">
+              Write, research, generate images, and manage your chat history in a workspace that feels calm and production ready.
+            </p>
+          </div>
 
-      {/* Stacked cards wrapper */}
-      <div className="relative w-full max-w-[380px]">
+          <div className="grid gap-4 md:grid-cols-2">
+            {[
+              "Modern workspace for text and image generation",
+              "Clean chat history and responsive premium interface",
+              "Secure login, payments, and Markdown rendering",
+              "Built for shipping, not just demos",
+            ].map((item) => (
+              <div key={item} className="app-card rounded-[24px] px-5 py-4 text-sm leading-7 text-slate-300">
+                {item}
+              </div>
+            ))}
+          </div>
+        </div>
 
-        {/* Back card 2 — furthest, most tilted */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl rotate-6 translate-x-2 translate-y-2 shadow-lg" />
+        <div className="glass-panel rounded-[36px] px-6 py-8 sm:px-10 sm:py-10">
+          <div className="mb-8">
+            <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">
+              {state === "login" ? "Welcome back" : "Create account"}
+            </p>
+            <h2 className="mt-3 text-3xl font-semibold text-white">
+              {state === "login" ? "Sign in to continue" : "Join AskGPT"}
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-400">
+              Access your chat workspace, credits, and image generation tools.
+            </p>
+          </div>
 
-        {/* Back card 1 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-300 to-blue-400 rounded-2xl rotate-3 translate-x-1 translate-y-1 shadow-md" />
-
-        {/* Main white card */}
-        <div className="relative bg-white rounded-2xl shadow-xl px-10 py-10 z-10">
-
-          {/* Title */}
-          <h1 className="text-2xl font-bold text-gray-800 text-center mb-8">
-            {state === "login" ? "Login" : "Sign Up"}
-          </h1>
-
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-
-            {/* Name — register only */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {state !== "login" && (
-              <div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-300">Full name</label>
                 <input
                   type="text"
                   name="name"
@@ -63,13 +84,13 @@ const Login = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full border-b border-gray-300 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:border-cyan-500 transition-colors bg-transparent"
+                  className="app-input w-full rounded-2xl px-4 py-3.5 text-sm"
                 />
               </div>
             )}
 
-            {/* Email */}
-            <div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-300">Email</label>
               <input
                 type="email"
                 name="email"
@@ -77,74 +98,73 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full border-b border-gray-300 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:border-cyan-500 transition-colors bg-transparent"
+                className="app-input w-full rounded-2xl px-4 py-3.5 text-sm"
               />
             </div>
 
-            {/* Password */}
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="w-full border-b border-gray-300 py-2.5 pr-10 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:border-cyan-500 transition-colors bg-transparent"
-              />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-300">Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className="app-input w-full rounded-2xl px-4 py-3.5 pr-12 text-sm"
+                />
 
-              {/* Eye toggle — only visible after typing */}
-              {formData.password && (
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  {showPassword ? (
-                    /* Eye-off icon */
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
-                      <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
-                      <path d="M14.12 14.12a3 3 0 11-4.24-4.24" />
-                      <line x1="1" y1="1" x2="23" y2="23" />
-                    </svg>
-                  ) : (
-                    /* Eye icon */
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                  )}
-                </button>
-              )}
+                {formData.password && (
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 transition hover:bg-white/5 hover:text-white"
+                  >
+                    {showPassword ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94" />
+                        <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19" />
+                        <path d="M14.12 14.12a3 3 0 11-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
 
-            {/* Submit button */}
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-28 py-2 bg-gradient-to-r from-cyan-400 to-blue-500 text-white text-sm font-semibold rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="app-button app-button-primary mt-3 w-full rounded-2xl px-4 py-3.5 text-sm font-semibold"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  Wait...
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  Please wait...
                 </span>
+              ) : state === "login" ? (
+                "Sign In"
               ) : (
-                "Submit"
+                "Create Account"
               )}
             </button>
           </form>
 
-          {/* Switch login/register */}
-          <p className="text-center text-gray-500 text-xs mt-8">
-            {state === "login" ? "Don't have an account? " : "Already have an account? "}
+          <p className="mt-8 text-center text-sm text-slate-500">
+            {state === "login" ? "Don’t have an account? " : "Already have an account? "}
             <button
               type="button"
-              onClick={() => setState((s) => (s === "login" ? "register" : "login"))}
-              className="text-cyan-500 font-semibold hover:underline"
+              onClick={() => setState((prev) => (prev === "login" ? "register" : "login"))}
+              className="font-semibold text-blue-300 transition hover:text-blue-200"
             >
-              {state === "login" ? "Sign up" : "Sign in"}
+              {state === "login" ? "Create one" : "Sign in"}
             </button>
           </p>
         </div>

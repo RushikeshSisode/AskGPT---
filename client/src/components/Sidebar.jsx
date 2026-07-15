@@ -1,13 +1,62 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../context/AppContext";
-import { assets } from "../assets/assets";
+import { useMemo, useState } from "react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config/apiBaseUrl";
+import { useAppContext } from "../context/AppContext";
+
+const navItems = [
+  {
+    label: "Community",
+    path: "/community",
+    icon: (
+      <path
+        d="M4 7.8A1.8 1.8 0 0 1 5.8 6h12.4A1.8 1.8 0 0 1 20 7.8v8.4a1.8 1.8 0 0 1-1.8 1.8H5.8A1.8 1.8 0 0 1 4 16.2Z M8 14l2.5-2.5L14 15l2-2 2 2"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    ),
+  },
+  {
+    label: "Upgrade",
+    path: "/credits",
+    icon: (
+      <path
+        d="M8 6h8l4 5-8 7-8-7 4-5Z M8 6l4 12L16 6"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    ),
+  },
+];
+
+const groupChats = (chats) => {
+  const groups = {
+    Today: [],
+    Yesterday: [],
+    "Previous 7 Days": [],
+    Earlier: [],
+  };
+
+  chats.forEach((chat) => {
+    const updatedAt = moment(chat.updatedAt);
+    if (updatedAt.isSame(moment(), "day")) {
+      groups.Today.push(chat);
+    } else if (updatedAt.isSame(moment().subtract(1, "day"), "day")) {
+      groups.Yesterday.push(chat);
+    } else if (updatedAt.isAfter(moment().subtract(7, "days"))) {
+      groups["Previous 7 Days"].push(chat);
+    } else {
+      groups.Earlier.push(chat);
+    }
+  });
+
+  return Object.entries(groups).filter(([, items]) => items.length > 0);
+};
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   const navigate = useNavigate();
-
   const {
     chats,
     setChats,
@@ -21,34 +70,38 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   } = useAppContext();
 
   const [search, setSearch] = useState("");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const filteredChats = useMemo(
+    () => chats.filter((chat) => chat.chatname?.toLowerCase().includes(search.toLowerCase())),
+    [chats, search]
+  );
+
+  const groupedChats = useMemo(() => groupChats(filteredChats), [filteredChats]);
+
+  const closeSidebar = () => setIsMenuOpen(false);
 
   const handleMenuClick = (path) => {
     navigate(path);
-    setIsMenuOpen(false);
+    closeSidebar();
   };
 
-  // REAL DELETE
   const deleteChat = async (chatId) => {
     if (!chatId) return;
 
     try {
       const token = localStorage.getItem("token");
-
-      const res = await fetch(`${API_BASE_URL}/api/chats/${chatId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/chats/${chatId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const data = await res.json();
-      if (!data.success) {
-        console.error("Delete failed:", data.message);
-        return;
-      }
+      const data = await response.json();
+      if (!data.success) return;
 
-      setChats((prev) => prev.filter((c) => c._id !== chatId));
-
+      setChats((prev) => prev.filter((chat) => chat._id !== chatId));
       if (selectedChat?._id === chatId) {
         setSelectedChat(null);
       }
@@ -58,166 +111,274 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   };
 
   return (
-    <aside
-      className={`
-        fixed md:static top-0 left-0 h-screen min-w-72 p-6
-        bg-white dark:bg-[#121212]/70 backdrop-blur-2xl
-        shadow-xl md:shadow-none border-r border-gray-200 dark:border-white/10
-        transition-all duration-300 ease-out z-40
-        ${isMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-      `}
-    >
-      {/* Mobile Close */}
-      <img
-        src={assets.close_icon}
-        alt="Close"
-        onClick={() => setIsMenuOpen(false)}
-        className="md:hidden w-7 h-7 absolute top-5 right-5 cursor-pointer dark:invert"
-      />
-
-      {/* Logo */}
-      <img
-        src={theme === "dark" ? assets.logo_full : assets.logo_full_dark}
-        alt="AskVision"
-        className="w-40 mb-6 cursor-pointer"
-        onClick={() => handleMenuClick("/")}
-      />
-
-      {/* New Chat */}
-      <button
-        onClick={() => {
-          createNewChat();
-          navigate("/");
-          setIsMenuOpen(false);
-        }}
-        className="w-full py-2.5 mb-4 flex items-center justify-center gap-2
-                   bg-gradient-to-r from-[#A456F7] to-[#40B5F6]
-                   text-white font-medium rounded-lg hover:opacity-90"
-      >
-        <span className="text-xl">+</span> New Chat
-      </button>
-
-      {/* Search */}
+    <>
       <div
-        className="flex items-center gap-2 p-3 bg-gray-100 dark:bg-white/5 
-                      border border-gray-300 dark:border-white/10 rounded-lg mb-5"
+        className={`fixed inset-0 z-30 bg-slate-950/55 backdrop-blur-sm transition md:hidden ${
+          isMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        }`}
+        onClick={closeSidebar}
+      />
+
+      <aside
+        className={`glass-panel fixed inset-y-3 left-3 z-40 flex h-[calc(100vh-1.5rem)] flex-col rounded-[28px] px-3 py-3 transition-all duration-300 md:static md:inset-auto md:h-[calc(100vh-2rem)] ${
+          isCollapsed ? "w-[92px]" : "w-[320px]"
+        } ${isMenuOpen ? "translate-x-0" : "-translate-x-[110%] md:translate-x-0"}`}
       >
-        <img src={assets.search_icon} className="w-4 dark:invert" />
-        <input
-          type="text"
-          placeholder="Search chats"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-transparent outline-none text-sm w-full"
-        />
-      </div>
-
-      {/* Chats */}
-      <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">
-        Recent Chats
-      </p>
-
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-        {chats
-          .filter((chat) =>
-            chat.chatname?.toLowerCase().includes(search.toLowerCase()),
-          )
-          .map((chat) => (
-            <div
-              key={chat._id}
-              onClick={() => {
-                setSelectedChat(chat);
-                navigate("/");
-                setIsMenuOpen(false);
-              }}
-              className="group p-3 bg-gray-100 dark:bg-white/5 border 
-                         border-gray-300 dark:border-white/10 rounded-lg 
-                         flex justify-between items-center cursor-pointer 
-                         hover:bg-gray-200 dark:hover:bg-white/10 transition"
-            >
-              <div className="w-full">
-                <p className="truncate font-medium text-sm">
-                  {chat.chatname || "New Chat"}
-                </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {chat.updatedAt
-                    ? moment(chat.updatedAt).fromNow()
-                    : "Recently"}
-                </p>
-              </div>
-
-              {/* Delete */}
-              <img
-                src={assets.bin_icon}
-                alt="Delete"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteChat(chat._id);
-                }}
-                className="hidden group-hover:block w-4 shrink-0 cursor-pointer brightness-0 invert-[11%] sepia-[91%] saturate-[5067%] hue-rotate-[356deg] brightness-[91%] contrast-[114%] dark:invert-[33%] dark:sepia-[91%] dark:saturate-[2100%] dark:hue-rotate-[344deg] dark:brightness-[105%] dark:contrast-[96%]"
-                
-              />
+        <div className="mb-4 flex items-center justify-between gap-2 rounded-[22px] border border-white/8 bg-white/5 p-2">
+          <button
+            type="button"
+            onClick={() => handleMenuClick("/")}
+            className={`flex items-center gap-3 rounded-[18px] px-2 py-2 text-left transition hover:bg-white/5 ${
+              isCollapsed ? "w-full justify-center" : ""
+            }`}
+          >
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/12 text-blue-300">
+              <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" stroke="currentColor">
+                <path d="M12 3.75A8.25 8.25 0 1 0 20.25 12" strokeWidth="1.8" strokeLinecap="round" />
+                <path
+                  d="M14.7 6.6a3.9 3.9 0 0 1 3.6 3.9c0 2.6-1.9 4.2-4.1 5.5l-2.2 1.2a3.4 3.4 0 0 1-4.9-3.1c0-1.7.9-3.1 2.4-3.9l2.1-1.2a2.1 2.1 0 0 0 1.1-1.9c0-.9.7-1.6 1.6-1.6h.4Z"
+                  strokeWidth="1.4"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
-          ))}
-      </div>
+            {!isCollapsed && (
+              <div>
+                <p className="text-sm font-semibold text-white">AskGPT</p>
+                <p className="text-xs text-slate-400">AI workspace</p>
+              </div>
+            )}
+          </button>
 
-      {/* Divider */}
-      <div className="my-5 border-t border-gray-300 dark:border-white/10" />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsCollapsed((value) => !value)}
+              aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className="hidden h-9 w-9 items-center justify-center rounded-2xl border border-white/8 bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-white md:flex"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
+                <path d="M15 6l-6 6 6 6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
 
-      {/*Community Images */}
-      <div
-        onClick={() => handleMenuClick("/community")}
-        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 
-                   dark:hover:bg-white/10 cursor-pointer"
-      >
-        <img src={assets.gallery_icon} className="w-5 dark:invert" />
-        <span className="text-sm">Community Images</span>
-      </div>
-
-      {/* Credits */}
-      <div
-        onClick={() => handleMenuClick("/credits")}
-        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 
-                   dark:hover:bg-white/10 cursor-pointer"
-      >
-        <img src={assets.diamond_icon} className="w-5 dark:invert" />
-        <span className="text-sm">Credits: {user?.credits ?? 0}</span>
-      </div>
-
-      {/* Theme Toggle */}
-      <div
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 
-                   dark:hover:bg-white/10 cursor-pointer"
-      >
-        <span className="text-xl">{theme === "dark" ? "🌞" : "🌙"}</span>
-        <span className="text-sm">
-          {theme === "dark" ? "Light Mode" : "Dark Mode"}
-        </span>
-      </div>
-
-      {/* User / Logout */}
-      <div
-        className="flex items-center justify-between p-3 mt-5 bg-gray-100 
-                   dark:bg-white/5 border border-gray-300 dark:border-white/10 
-                   rounded-lg"
-      >
-        <div className="flex items-center gap-3">
-          <img src={assets.user_icon} className="w-6 dark:invert" />
-          <p className="text-sm truncate">{user?.name}</p>
+            <button
+              type="button"
+              onClick={closeSidebar}
+              className="flex h-9 w-9 items-center justify-center rounded-2xl border border-white/8 bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-white md:hidden"
+              aria-label="Close sidebar"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
+                <path d="M6 6l12 12M18 6 6 18" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <img
-          src={assets.logout_icon}
-          className="w-5 cursor-pointer"
-          style={{
-            filter:
-              "invert(40%) sepia(100%) saturate(500%) hue-rotate(190deg) brightness(100%)",
+        <button
+          type="button"
+          onClick={async () => {
+            await createNewChat();
+            navigate("/");
+            closeSidebar();
           }}
-          onClick={logout}
-        />
-      </div>
-    </aside>
+          className={`app-button app-button-primary mb-3 rounded-[20px] px-4 py-3 text-sm font-semibold ${
+            isCollapsed ? "justify-center px-0" : "w-full"
+          }`}
+        >
+          <span className="text-base">+</span>
+          {!isCollapsed && "New Chat"}
+        </button>
+
+        {!isCollapsed && (
+          <div className="mb-4">
+            <div className="app-input flex items-center gap-3 rounded-[18px] px-3 py-3">
+              <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5 text-slate-500" stroke="currentColor">
+                <path
+                  d="m21 21-4.35-4.35M10.75 18a7.25 7.25 0 1 1 0-14.5 7.25 7.25 0 0 1 0 14.5Z"
+                  strokeWidth="1.8"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search conversations"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="flex-1 overflow-y-auto pr-1">
+          {!isCollapsed ? (
+            groupedChats.length > 0 ? (
+              groupedChats.map(([label, items]) => (
+                <div key={label} className="mb-5">
+                  <p className="mb-2 px-2 text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500">
+                    {label}
+                  </p>
+                  <div className="space-y-2">
+                    {items.map((chat) => {
+                      const isActive = selectedChat?._id === chat._id;
+                      return (
+                        <button
+                          key={chat._id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedChat(chat);
+                            navigate("/");
+                            closeSidebar();
+                          }}
+                          className={`group flex w-full items-start gap-3 rounded-[20px] border px-3 py-3 text-left transition ${
+                            isActive
+                              ? "border-blue-400/35 bg-blue-500/10"
+                              : "border-transparent bg-white/[0.03] hover:border-white/10 hover:bg-white/[0.06]"
+                          }`}
+                        >
+                          <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-slate-900/90 text-slate-300">
+                            <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
+                              <path
+                                d="M8 8h8M8 12h5M6.75 4h10.5A1.75 1.75 0 0 1 19 5.75v12.5A1.75 1.75 0 0 1 17.25 20H6.75A1.75 1.75 0 0 1 5 18.25V5.75A1.75 1.75 0 0 1 6.75 4Z"
+                                strokeWidth="1.6"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-slate-100">
+                              {chat.chatname || "New Chat"}
+                            </p>
+                            <p className="mt-1 text-xs text-slate-500">
+                              {chat.updatedAt ? moment(chat.updatedAt).fromNow() : "Recently"}
+                            </p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              deleteChat(chat._id);
+                            }}
+                            className="mt-1 hidden rounded-xl border border-white/8 bg-white/5 p-2 text-slate-500 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300 group-hover:block"
+                            aria-label="Delete conversation"
+                          >
+                            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor">
+                              <path
+                                d="M4 7h16M10 11v5M14 11v5M6.5 7l1 11A2 2 0 0 0 9.5 20h5a2 2 0 0 0 2-2l1-11M9 7V4.8A.8.8 0 0 1 9.8 4h4.4a.8.8 0 0 1 .8.8V7"
+                                strokeWidth="1.6"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </button>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-[22px] border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-sm text-slate-500">
+                No conversations yet. Start a new chat to build your history.
+              </div>
+            )
+          ) : (
+            <div className="flex flex-col gap-2">
+              {filteredChats.slice(0, 8).map((chat) => (
+                <button
+                  key={chat._id}
+                  type="button"
+                  onClick={() => {
+                    setSelectedChat(chat);
+                    navigate("/");
+                    closeSidebar();
+                  }}
+                  className={`flex h-11 w-11 items-center justify-center rounded-2xl border text-xs font-medium transition ${
+                    selectedChat?._id === chat._id
+                      ? "border-blue-400/35 bg-blue-500/15 text-blue-100"
+                      : "border-white/8 bg-white/[0.03] text-slate-400 hover:bg-white/[0.07]"
+                  }`}
+                  title={chat.chatname}
+                >
+                  {chat.chatname?.slice(0, 1)?.toUpperCase() || "N"}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="mt-3 space-y-2 border-t border-white/8 pt-3">
+          {navItems.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => handleMenuClick(item.path)}
+              className={`group flex w-full items-center gap-3 rounded-[20px] px-3 py-3 text-sm text-slate-300 transition hover:bg-white/[0.05] hover:text-white ${
+                isCollapsed ? "justify-center px-0" : ""
+              }`}
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 shrink-0" stroke="currentColor">
+                {item.icon}
+              </svg>
+              {!isCollapsed && <span>{item.label}</span>}
+            </button>
+          ))}
+
+          <button
+            type="button"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className={`group flex w-full items-center gap-3 rounded-[20px] px-3 py-3 text-sm text-slate-300 transition hover:bg-white/[0.05] hover:text-white ${
+              isCollapsed ? "justify-center px-0" : ""
+            }`}
+          >
+            <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 shrink-0" stroke="currentColor">
+              <path
+                d="M12 3v2.5M12 18.5V21M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M3 12h2.5M18.5 12H21M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+              <circle cx="12" cy="12" r="3.2" strokeWidth="1.6" />
+            </svg>
+            {!isCollapsed && <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>}
+          </button>
+        </div>
+
+        <div className={`mt-3 rounded-[22px] border border-white/8 bg-white/[0.04] p-3 ${isCollapsed ? "px-2" : ""}`}>
+          {isCollapsed ? (
+            <button
+              type="button"
+              onClick={logout}
+              className="flex h-10 w-full items-center justify-center rounded-2xl bg-slate-950/70 text-slate-300 transition hover:bg-slate-900"
+              aria-label="Log out"
+            >
+              <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
+                <path d="M15 17l5-5-5-5M20 12H9M11 19H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          ) : (
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/15 text-sm font-semibold text-blue-100">
+                {user?.name?.slice(0, 1)?.toUpperCase() || "U"}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-white">{user?.name}</p>
+                <p className="truncate text-xs text-slate-500">{user?.email || "Starter plan"}</p>
+              </div>
+              <button
+                type="button"
+                onClick={logout}
+                className="rounded-2xl border border-white/8 bg-slate-950/70 p-2.5 text-slate-400 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-300"
+                aria-label="Log out"
+              >
+                <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
+                  <path d="M15 17l5-5-5-5M20 12H9M11 19H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+          )}
+        </div>
+      </aside>
+    </>
   );
 };
 
