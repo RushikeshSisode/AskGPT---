@@ -102,31 +102,24 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="flex h-full flex-col px-3 pb-3 pt-3 md:px-4 md:pb-4 md:pt-4">
-      <div className="glass-panel flex min-h-0 flex-1 flex-col overflow-hidden rounded-[32px]">
-        <div className="border-b border-white/8 px-5 py-4 sm:px-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.22em] text-slate-500">
-                Workspace
-              </p>
-              <h2 className="mt-1 text-xl font-semibold text-white">
-                {selectedChat?.chatname || "New conversation"}
-              </h2>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.04] px-3 py-2 text-xs text-slate-400">
-              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-              {loading ? "Generating response" : `Signed in as ${user?.name || "User"}`}
-            </div>
-          </div>
+    <div className="relative flex h-full min-w-0 flex-col bg-[var(--chat-bg)]">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--app-border)] px-5 md:h-16 md:px-7">
+        <div className="min-w-0 pl-11 md:pl-0">
+          <h2 className="truncate text-sm font-semibold text-[var(--app-text)]">
+            {selectedChat?.chatname || "AskGPT"}
+          </h2>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6">
+        <button type="button" className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--subtle-bg)] text-xs font-semibold text-[var(--app-text-soft)]" title={user?.name || "Account"}>
+          {user?.name?.slice(0, 1)?.toUpperCase() || "U"}
+        </button>
+      </div>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-36 pt-5 sm:px-6">
           {messages.length === 0 ? (
             <EmptyState onSelectSuggestion={handleSuggestion} />
           ) : (
-            <div className="mx-auto flex w-full max-w-4xl flex-col gap-5">
+            <div className="mx-auto flex w-full max-w-3xl flex-col gap-7 py-3">
               {messages.map((message, index) => (
                 <Message key={`${message.timestamp}-${index}`} message={message} />
               ))}
@@ -136,8 +129,8 @@ const ChatBox = () => {
           <div ref={bottomRef} />
         </div>
 
-        <div className="border-t border-white/8 bg-slate-950/40 px-4 py-4 sm:px-6">
-          <div className="mx-auto w-full max-w-4xl">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[var(--chat-bg)] via-[var(--chat-bg)] to-transparent px-4 pb-4 pt-12 sm:px-6">
+          <div className="pointer-events-auto mx-auto w-full max-w-3xl">
             <form onSubmit={handleSend}>
               <ChatInput
                 value={inputText}
@@ -152,7 +145,6 @@ const ChatBox = () => {
             </form>
           </div>
         </div>
-      </div>
     </div>
   );
 };

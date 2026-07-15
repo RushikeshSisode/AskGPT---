@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 const iconButtonClass =
-  "app-button app-button-secondary h-10 w-10 rounded-2xl border border-white/10 text-slate-300 hover:text-white";
+  "flex h-9 w-9 items-center justify-center rounded-full text-[var(--app-text-soft)] transition hover:bg-[var(--subtle-bg)] hover:text-[var(--app-text)]";
 
 const ChatInput = ({
   value,
@@ -29,13 +29,14 @@ const ChatInput = ({
   };
 
   return (
-    <div className="glass-panel rounded-[28px] p-3 sm:p-4">
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+    <div>
+      <div className="composer overflow-hidden rounded-[26px] border border-[var(--app-border-strong)] bg-[var(--composer-bg)] shadow-lg">
+      <div className="flex flex-wrap items-center gap-1 px-3 pt-2">
         <button
           type="button"
           onClick={() => setMode("text")}
-          className={`app-button rounded-full px-4 py-2 text-sm font-medium ${
-            mode === "text" ? "app-button-primary" : "app-button-secondary"
+          className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            mode === "text" ? "bg-[var(--active-bg)] text-[var(--app-text)]" : "text-[var(--app-text-soft)] hover:bg-[var(--subtle-bg)]"
           }`}
         >
           Text
@@ -43,15 +44,15 @@ const ChatInput = ({
         <button
           type="button"
           onClick={() => setMode("image")}
-          className={`app-button rounded-full px-4 py-2 text-sm font-medium ${
-            mode === "image" ? "app-button-primary" : "app-button-secondary"
+          className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            mode === "image" ? "bg-[var(--active-bg)] text-[var(--app-text)]" : "text-[var(--app-text-soft)] hover:bg-[var(--subtle-bg)]"
           }`}
         >
           Image
         </button>
 
         {mode === "image" && (
-          <label className="ml-auto inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+          <label className="ml-auto inline-flex items-center gap-2 px-2 text-xs text-[var(--app-text-soft)]">
             <input
               type="checkbox"
               checked={isPublished}
@@ -63,7 +64,7 @@ const ChatInput = ({
         )}
       </div>
 
-      <div className="rounded-[24px] border border-white/8 bg-slate-950/60 px-3 py-3">
+      <div className="px-3 pb-2">
         <textarea
           ref={textareaRef}
           rows={1}
@@ -71,11 +72,11 @@ const ChatInput = ({
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={mode === "image" ? "Describe the image you want..." : "Message AskGPT..."}
-          className="min-h-[54px] w-full bg-transparent px-2 py-2 text-[15px] leading-7 text-slate-100 outline-none placeholder:text-slate-500"
+          className="min-h-[46px] w-full bg-transparent px-1 py-3 text-[15px] leading-6 text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
           aria-label={mode === "image" ? "Image prompt input" : "Chat message input"}
         />
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button type="button" className={iconButtonClass} aria-label="Attach file">
               <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
@@ -106,19 +107,19 @@ const ChatInput = ({
           <button
             type="submit"
             disabled={disabled || !value.trim()}
-            className="app-button app-button-primary min-w-[132px] rounded-2xl px-5 py-3 text-sm font-semibold"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--app-text)] text-[var(--chat-bg)] transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-30"
+            aria-label={mode === "image" ? "Generate image" : "Send message"}
           >
-            {disabled ? "Working..." : mode === "image" ? "Generate" : "Send"}
             <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor">
-              <path d="M4 12h14M13 5l7 7-7 7" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M12 19V5M6.5 10.5 12 5l5.5 5.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
       </div>
+      </div>
 
-      <p className="mt-3 px-1 text-xs text-slate-500">
-        Press <span className="rounded bg-white/5 px-1.5 py-0.5 text-slate-300">Enter</span> to
-        send and <span className="rounded bg-white/5 px-1.5 py-0.5 text-slate-300">Shift + Enter</span> for a new line.
+      <p className="mt-2 text-center text-[11px] text-[var(--app-text-soft)]">
+        AskGPT can make mistakes. Check important information.
       </p>
     </div>
   );

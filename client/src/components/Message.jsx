@@ -32,7 +32,7 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
   }
 
   return (
-    <div className="my-4 overflow-hidden rounded-[20px] border border-white/10 bg-[#111827]">
+    <div className="my-4 overflow-hidden rounded-xl border border-[var(--app-border)] bg-[#0d0d0d]">
       <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-4 py-2.5">
         <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
           {language}
@@ -65,16 +65,16 @@ const Message = ({ message }) => {
   return (
     <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-900/90 text-xs font-semibold text-slate-200">
-          AI
+        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--app-border-strong)] bg-[var(--subtle-bg)] text-[11px] font-semibold text-[var(--app-text)]">
+          A
         </div>
       )}
 
       <div
-        className={`max-w-[min(88%,820px)] rounded-[24px] px-4 py-4 shadow-sm transition-all sm:px-5 ${
+        className={`max-w-[min(88%,820px)] text-[var(--app-text)] ${
           isUser
-            ? "rounded-tr-md bg-blue-500 text-white shadow-blue-500/10"
-            : "app-card rounded-tl-md text-slate-100"
+            ? "rounded-[20px] bg-[var(--user-message-bg)] px-4 py-2.5"
+            : "min-w-0 flex-1 px-1 py-1"
         }`}
       >
         {message.isImage ? (
@@ -96,21 +96,9 @@ const Message = ({ message }) => {
           </div>
         )}
 
-        <div className={`mt-3 flex items-center gap-2 text-xs ${isUser ? "text-blue-100/80" : "text-slate-400"}`}>
-          {!isUser && (
-            <span className="inline-flex h-4 w-4 items-center justify-center rounded bg-blue-500/15 text-[9px] font-semibold text-blue-200">
-              AI
-            </span>
-          )}
-          <span>{moment(message.timestamp).fromNow()}</span>
-        </div>
+        {isUser && <div className="mt-1 text-right text-[10px] text-[var(--app-text-soft)]">{moment(message.timestamp).fromNow()}</div>}
       </div>
 
-      {isUser && (
-        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-900/90 text-sm font-semibold text-slate-100">
-          {userInitial}
-        </div>
-      )}
     </div>
   );
 };

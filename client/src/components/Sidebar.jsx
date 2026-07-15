@@ -120,11 +120,11 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
       />
 
       <aside
-        className={`glass-panel fixed inset-y-3 left-3 z-40 flex h-[calc(100vh-1.5rem)] flex-col rounded-[28px] px-3 py-3 transition-all duration-300 md:static md:inset-auto md:h-[calc(100vh-2rem)] ${
-          isCollapsed ? "w-[92px]" : "w-[320px]"
+        className={`chat-sidebar fixed inset-y-0 left-0 z-40 flex h-screen flex-col border-r border-[var(--app-border)] bg-[var(--sidebar-bg)] px-2 py-2 transition-all duration-200 md:static md:inset-auto ${
+          isCollapsed ? "w-[68px]" : "w-[260px]"
         } ${isMenuOpen ? "translate-x-0" : "-translate-x-[110%] md:translate-x-0"}`}
       >
-        <div className="mb-4 flex items-center justify-between gap-2 rounded-[22px] border border-white/8 bg-white/5 p-2">
+        <div className="mb-2 flex items-center justify-between gap-1 p-1">
           <button
             type="button"
             onClick={() => handleMenuClick("/")}
@@ -132,7 +132,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
               isCollapsed ? "w-full justify-center" : ""
             }`}
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-500/12 text-blue-300">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--app-text)] text-[var(--sidebar-bg)]">
               <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" stroke="currentColor">
                 <path d="M12 3.75A8.25 8.25 0 1 0 20.25 12" strokeWidth="1.8" strokeLinecap="round" />
                 <path
@@ -144,8 +144,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             </div>
             {!isCollapsed && (
               <div>
-                <p className="text-sm font-semibold text-white">AskGPT</p>
-                <p className="text-xs text-slate-400">AI workspace</p>
+                <p className="text-sm font-semibold text-[var(--app-text)]">AskGPT</p>
               </div>
             )}
           </button>
@@ -155,7 +154,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
               type="button"
               onClick={() => setIsCollapsed((value) => !value)}
               aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              className="hidden h-9 w-9 items-center justify-center rounded-2xl border border-white/8 bg-white/5 text-slate-400 transition hover:bg-white/10 hover:text-white md:flex"
+              className="hidden h-9 w-9 items-center justify-center rounded-lg text-[var(--app-text-soft)] transition hover:bg-[var(--subtle-bg)] hover:text-[var(--app-text)] md:flex"
             >
               <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
                 <path d="M15 6l-6 6 6 6" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
@@ -182,7 +181,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             navigate("/");
             closeSidebar();
           }}
-          className={`app-button app-button-primary mb-3 rounded-[20px] px-4 py-3 text-sm font-semibold ${
+          className={`mb-3 flex items-center gap-2 rounded-lg border border-[var(--app-border-strong)] px-3 py-2.5 text-sm font-medium text-[var(--app-text)] transition hover:bg-[var(--subtle-bg)] ${
             isCollapsed ? "justify-center px-0" : "w-full"
           }`}
         >
@@ -192,7 +191,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
 
         {!isCollapsed && (
           <div className="mb-4">
-            <div className="app-input flex items-center gap-3 rounded-[18px] px-3 py-3">
+            <div className="flex items-center gap-2 rounded-lg px-3 py-2 text-[var(--app-text-soft)] hover:bg-[var(--subtle-bg)]">
               <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5 text-slate-500" stroke="currentColor">
                 <path
                   d="m21 21-4.35-4.35M10.75 18a7.25 7.25 0 1 1 0-14.5 7.25 7.25 0 0 1 0 14.5Z"
@@ -231,27 +230,15 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                             navigate("/");
                             closeSidebar();
                           }}
-                          className={`group flex w-full items-start gap-3 rounded-[20px] border px-3 py-3 text-left transition ${
+                          className={`group flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left transition ${
                             isActive
-                              ? "border-blue-400/35 bg-blue-500/10"
-                              : "border-transparent bg-white/[0.03] hover:border-white/10 hover:bg-white/[0.06]"
+                              ? "bg-[var(--active-bg)]"
+                              : "hover:bg-[var(--subtle-bg)]"
                           }`}
                         >
-                          <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-slate-900/90 text-slate-300">
-                            <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
-                              <path
-                                d="M8 8h8M8 12h5M6.75 4h10.5A1.75 1.75 0 0 1 19 5.75v12.5A1.75 1.75 0 0 1 17.25 20H6.75A1.75 1.75 0 0 1 5 18.25V5.75A1.75 1.75 0 0 1 6.75 4Z"
-                                strokeWidth="1.6"
-                                strokeLinecap="round"
-                              />
-                            </svg>
-                          </div>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-medium text-slate-100">
+                            <p className="truncate text-sm font-normal text-[var(--app-text)]">
                               {chat.chatname || "New Chat"}
-                            </p>
-                            <p className="mt-1 text-xs text-slate-500">
-                              {chat.updatedAt ? moment(chat.updatedAt).fromNow() : "Recently"}
                             </p>
                           </div>
                           <button

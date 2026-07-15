@@ -7,15 +7,20 @@
 
 :root {
   color-scheme: dark;
-  --app-bg: #0b0f19;
-  --app-bg-secondary: #111827;
-  --app-panel: rgba(17, 24, 39, 0.78);
-  --app-card: rgba(31, 41, 55, 0.74);
+  --app-bg: #212121;
+  --chat-bg: #212121;
+  --sidebar-bg: #171717;
+  --composer-bg: #2f2f2f;
+  --subtle-bg: rgba(255, 255, 255, 0.06);
+  --active-bg: rgba(255, 255, 255, 0.1);
+  --user-message-bg: #303030;
+  --app-panel: #171717;
+  --app-card: #2b2b2b;
   --app-border: rgba(255, 255, 255, 0.08);
   --app-border-strong: rgba(255, 255, 255, 0.14);
-  --app-text: #f9fafb;
-  --app-text-soft: #9ca3af;
-  --app-primary: #3b82f6;
+  --app-text: #ececec;
+  --app-text-soft: #a1a1aa;
+  --app-primary: #10a37f;
   --app-primary-hover: #2563eb;
   --app-success: #10b981;
   --app-danger: #ef4444;
@@ -37,15 +42,28 @@ body,
 body {
   margin: 0;
   color: var(--app-text);
-  background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 26%),
-    linear-gradient(180deg, #0f172a 0%, var(--app-bg) 42%, #09111f 100%);
+  background: var(--app-bg);
+}
+
+html.light {
+  color-scheme: light;
+  --app-bg: #ffffff;
+  --chat-bg: #ffffff;
+  --sidebar-bg: #f9f9f9;
+  --composer-bg: #f4f4f4;
+  --subtle-bg: rgba(0, 0, 0, 0.05);
+  --active-bg: rgba(0, 0, 0, 0.08);
+  --user-message-bg: #f4f4f4;
+  --app-panel: #f9f9f9;
+  --app-card: #f4f4f4;
+  --app-border: rgba(0, 0, 0, 0.08);
+  --app-border-strong: rgba(0, 0, 0, 0.14);
+  --app-text: #171717;
+  --app-text-soft: #6b7280;
 }
 
 html.light body {
-  background:
-    radial-gradient(circle at top, rgba(59, 130, 246, 0.08), transparent 26%),
-    linear-gradient(180deg, #1f2937 0%, #111827 48%, #0f172a 100%);
+  background: var(--app-bg);
 }
 
 button,
@@ -87,9 +105,7 @@ textarea {
 
 .app-shell {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 24%),
-    transparent;
+  background: var(--app-bg);
 }
 
 .glass-panel {

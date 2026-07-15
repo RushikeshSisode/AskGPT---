@@ -47,8 +47,8 @@ const App = () => {
         </button>
       )}
 
-      <div className="app-shell min-h-screen w-screen text-white">
-        <div className="flex h-screen w-full overflow-hidden p-3 md:p-4">
+      <div className="app-shell min-h-screen w-screen text-[var(--app-text)]">
+        <div className="flex h-screen w-full overflow-hidden">
           {user && <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />}
 
           <main className="min-w-0 flex-1 overflow-hidden">
