@@ -1,29 +1,238 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
 @import "tailwindcss";
 @import "prismjs/themes/prism-tomorrow.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
 
-
-@custom-variant dark (&:where(.dark,.dark *));
-
-*{
-      font-family: "Montserrat", sans-serif;
+:root {
+  color-scheme: dark;
+  --app-bg: #0b0f19;
+  --app-bg-secondary: #111827;
+  --app-panel: rgba(17, 24, 39, 0.78);
+  --app-card: rgba(31, 41, 55, 0.74);
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-border-strong: rgba(255, 255, 255, 0.14);
+  --app-text: #f9fafb;
+  --app-text-soft: #9ca3af;
+  --app-primary: #3b82f6;
+  --app-primary-hover: #2563eb;
+  --app-success: #10b981;
+  --app-danger: #ef4444;
+  --app-warning: #f59e0b;
+  --app-shadow: 0 24px 60px rgba(2, 6, 23, 0.35);
 }
 
-@theme{
-    --color-primary:#E6CCFF;
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
-input {
-  background-color: white;
-  color: black;
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
 }
 
-::-webkit-scrollbar{
-    display: none;
+body {
+  margin: 0;
+  color: var(--app-text);
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 26%),
+    linear-gradient(180deg, #0f172a 0%, var(--app-bg) 42%, #09111f 100%);
 }
 
-.reset-tw:not(pre):not(code){
-    all:revert;
+html.light body {
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.08), transparent 26%),
+    linear-gradient(180deg, #1f2937 0%, #111827 48%, #0f172a 100%);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+textarea {
+  color: var(--app-text);
+}
+
+textarea {
+  resize: none;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.24);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.12), transparent 24%),
+    transparent;
+}
+
+.glass-panel {
+  background: var(--app-panel);
+  border: 1px solid var(--app-border);
+  box-shadow: var(--app-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.app-card {
+  background: var(--app-card);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.18);
+}
+
+.app-input {
+  border: 1px solid var(--app-border);
+  background: rgba(15, 23, 42, 0.72);
+  color: var(--app-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.app-input::placeholder {
+  color: rgba(156, 163, 175, 0.82);
+}
+
+.app-input:focus-visible {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.14);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.app-button:hover {
+  transform: translateY(-1px);
+}
+
+.app-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.app-button-primary {
+  background: linear-gradient(135deg, var(--app-primary), #60a5fa);
+  color: white;
+}
+
+.app-button-primary:hover {
+  background: linear-gradient(135deg, var(--app-primary-hover), var(--app-primary));
+}
+
+.app-button-secondary {
+  background: rgba(15, 23, 42, 0.7);
+  color: var(--app-text);
+  border-color: var(--app-border);
+}
+
+.app-button-secondary:hover {
+  background: rgba(30, 41, 59, 0.95);
+}
+
+.app-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.app-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+.markdown-body {
+  color: inherit;
+}
+
+.markdown-body p,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body blockquote,
+.markdown-body table {
+  margin: 0.75rem 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 1.25rem;
+}
+
+.markdown-body blockquote {
+  border-left: 3px solid rgba(96, 165, 250, 0.7);
+  padding-left: 0.9rem;
+  color: rgba(226, 232, 240, 0.88);
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid var(--app-border);
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.markdown-body th {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.markdown-body :not(pre) > code {
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.85em;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }

@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
-import { assets } from "../assets/assets";
 
 Prism.manual = true;
 
@@ -57,6 +56,7 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
 
 const Message = ({ message }) => {
   const isUser = message.role === "user";
+  const userInitial = message.role === "user" ? "U" : "AI";
 
   useEffect(() => {
     Prism.highlightAll();
@@ -97,17 +97,19 @@ const Message = ({ message }) => {
         )}
 
         <div className={`mt-3 flex items-center gap-2 text-xs ${isUser ? "text-blue-100/80" : "text-slate-400"}`}>
-          {!isUser && <img src={assets.logo} alt="" className="h-4 w-4 rounded" />}
+          {!isUser && (
+            <span className="inline-flex h-4 w-4 items-center justify-center rounded bg-blue-500/15 text-[9px] font-semibold text-blue-200">
+              AI
+            </span>
+          )}
           <span>{moment(message.timestamp).fromNow()}</span>
         </div>
       </div>
 
       {isUser && (
-        <img
-          src={assets.user_icon}
-          className="mt-1 h-10 w-10 shrink-0 rounded-2xl border border-white/10 bg-slate-900/90 p-1.5"
-          alt="User avatar"
-        />
+        <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-slate-900/90 text-sm font-semibold text-slate-100">
+          {userInitial}
+        </div>
       )}
     </div>
   );
