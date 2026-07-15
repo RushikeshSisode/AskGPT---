@@ -5,42 +5,63 @@ import Chat from "../models/Chat.js";
 import User from "../models/User.js";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL || "gemini-3.1-flash-lite";
 
 const refundCredits = async (userId, amount) => {
   await User.updateOne({ _id: userId }, { $inc: { credits: amount } });
 };
 
 async function generateTextWithGemini(prompt, chat) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${GEMINI_API_KEY}`;
-
-  const contextMessages = chat.messages.slice(-10).map((message) => ({
-    role: message.role === "assistant" ? "model" : "user",
-    parts: [{ text: message.content }],
-  }));
-
-  const payload = {
-    contents: [
-      ...contextMessages,
-      {
-        role: "user",
-        parts: [{ text: prompt }],
-      },
-    ],
-  };
-
-  const { data } = await axios.post(url, payload);
-
-  const text =
-    data?.candidates?.[0]?.content?.parts
-      ?.map((part) => part.text || "")
-      .join(" ")
-      .trim() || "";
-
-  if (!text) {
-    throw new Error("Gemini returned empty response");
+  if (!GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not configured");
   }
 
-  return text;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent`;
+
+  const contents = [
+    ...chat.messages.slice(-10).map((message) => ({
+      role: message.role === "assistant" ? "model" : "user",
+      parts: [{ text: message.content }],
+    })),
+    {
+      role: "user",
+      parts: [{ text: prompt }],
+    },
+  ];
+
+  try {
+    const { data } = await axios.post(
+      url,
+      {
+        contents,
+      },
+      {
+        headers: {
+          "x-goog-api-key": GEMINI_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const text =
+      data?.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
+        .join(" ")
+        .trim() || "";
+
+    if (!text) {
+      throw new Error("Gemini returned empty response");
+    }
+
+    return text;
+  } catch (error) {
+    const apiError =
+      error?.response?.data?.error?.message ||
+      error?.response?.data?.message ||
+      error.message;
+
+    throw new Error(apiError);
+  }
 }
 
 export const messageController = async (req, res) => {
@@ -102,7 +123,7 @@ export const messageController = async (req, res) => {
       console.error("Gemini Error:", error.message);
       return res.status(500).json({
         success: false,
-        message: "AI failed to respond",
+        message: error.message || "AI failed to respond",
       });
     }
 
