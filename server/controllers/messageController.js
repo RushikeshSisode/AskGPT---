@@ -1,10 +1,10 @@
 import axios from "axios";
 import mongoose from "mongoose";
+import genAI from "../configs/Gemini.js";
 import imagekit from "../configs/ImageKit.js";
 import Chat from "../models/Chat.js";
 import User from "../models/User.js";
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const TEXT_MODEL = process.env.GEMINI_TEXT_MODEL || "gemini-3.1-flash-lite";
 
 const refundCredits = async (userId, amount) => {
@@ -12,11 +12,7 @@ const refundCredits = async (userId, amount) => {
 };
 
 async function generateTextWithGemini(prompt, chat) {
-  if (!GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not configured");
-  }
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${TEXT_MODEL}:generateContent`;
+  const model = genAI.getGenerativeModel({ model: TEXT_MODEL });
 
   const contents = [
     ...chat.messages.slice(-10).map((message) => ({
@@ -30,21 +26,11 @@ async function generateTextWithGemini(prompt, chat) {
   ];
 
   try {
-    const { data } = await axios.post(
-      url,
-      {
-        contents,
-      },
-      {
-        headers: {
-          "x-goog-api-key": GEMINI_API_KEY,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const result = await model.generateContent({ contents });
+    const response = await result.response;
 
     const text =
-      data?.candidates?.[0]?.content?.parts
+      response?.candidates?.[0]?.content?.parts
         ?.map((part) => part.text || "")
         .join(" ")
         .trim() || "";
