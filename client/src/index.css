@@ -5,19 +5,19 @@
 
 :root {
   color-scheme: dark;
-  --app-bg: #000000;
-  --chat-bg: #000000;
-  --sidebar-bg: #000000;
-  --composer-bg: #000000;
-  --subtle-bg: #111111;
-  --active-bg: #1a1a1a;
-  --user-message-bg: #111111;
-  --app-panel: #000000;
-  --app-card: #000000;
-  --app-border: #2a2a2a;
-  --app-border-strong: #3a3a3a;
+  --app-bg: #111111;
+  --chat-bg: #151515;
+  --sidebar-bg: #161616;
+  --composer-bg: #1b1b1b;
+  --subtle-bg: #222222;
+  --active-bg: #292929;
+  --user-message-bg: #242424;
+  --app-panel: #181818;
+  --app-card: #181818;
+  --app-border: #2f2f2f;
+  --app-border-strong: #404040;
   --app-text: #ffffff;
-  --app-text-soft: #a3a3a3;
+  --app-text-soft: #b3b3b3;
   --app-primary: #1976d2;
   --app-primary-text: #ffffff;
 }

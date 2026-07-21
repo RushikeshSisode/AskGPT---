@@ -27,12 +27,12 @@ const ChatInput = ({
 
   return (
     <div>
-      <div className="border border-[var(--app-border)] bg-[var(--composer-bg)]">
+      <div className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--composer-bg)]">
         <div className="flex flex-wrap items-center gap-2 border-b border-[var(--app-border)] px-3 py-2">
           <button
             type="button"
             onClick={() => setMode("text")}
-            className={`border px-3 py-1 text-xs ${
+            className={`rounded-full border px-3 py-1 text-xs ${
               mode === "text"
                 ? "border-[var(--app-border-strong)] bg-[var(--active-bg)] text-[var(--app-text)]"
                 : "border-[var(--app-border)] text-[var(--app-text-soft)]"
@@ -43,7 +43,7 @@ const ChatInput = ({
           <button
             type="button"
             onClick={() => setMode("image")}
-            className={`border px-3 py-1 text-xs ${
+            className={`rounded-full border px-3 py-1 text-xs ${
               mode === "image"
                 ? "border-[var(--app-border-strong)] bg-[var(--active-bg)] text-[var(--app-text)]"
                 : "border-[var(--app-border)] text-[var(--app-text-soft)]"
@@ -73,7 +73,7 @@ const ChatInput = ({
           onChange={(event) => onChange(event.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={mode === "image" ? "Describe the image you want..." : "Message AskGPT..."}
-          className="min-h-[46px] w-full bg-transparent py-2 text-[15px] leading-6 text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
+          className="min-h-[46px] w-full rounded-xl bg-transparent px-1 py-2 text-[15px] leading-6 text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
           aria-label={mode === "image" ? "Image prompt input" : "Chat message input"}
         />
 
@@ -81,7 +81,7 @@ const ChatInput = ({
           <button
             type="submit"
             disabled={disabled || !value.trim()}
-            className="bg-[var(--app-primary)] px-4 py-2 text-sm text-[var(--app-primary-text)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-xl bg-[var(--app-primary)] px-4 py-2 text-sm text-[var(--app-primary-text)] disabled:cursor-not-allowed disabled:opacity-40"
             aria-label={mode === "image" ? "Generate image" : "Send message"}
           >
             {mode === "image" ? "Generate" : "Send"}
