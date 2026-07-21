@@ -96,7 +96,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
           isMenuOpen ? "translate-x-0" : "-translate-x-[110%] md:translate-x-0"
         }`}
       >
-        <div className="flex items-center justify-between border-b border-[var(--app-border)] p-3">
+        <div className="flex items-center justify-between border-b border-[var(--app-border)] p-4">
           <button type="button" onClick={() => handleMenuClick("/")} className="text-left text-base font-medium text-[var(--app-text)]">
             AskGPT
           </button>
@@ -105,7 +105,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             <button
               type="button"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="rounded-xl border border-[var(--app-border)] px-3 py-1 text-sm text-[var(--app-text)]"
+              className="rounded-xl border border-[var(--app-border)] px-3 py-1.5 text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
             >
               {theme === "dark" ? "Light" : "Dark"}
             </button>
@@ -113,7 +113,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             <button
               type="button"
               onClick={closeSidebar}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--app-border)] text-[var(--app-text)] md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--app-border)] text-[var(--app-text)] hover:bg-[var(--subtle-bg)] md:hidden"
               aria-label="Close sidebar"
             >
               <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
@@ -130,7 +130,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             navigate("/");
             closeSidebar();
           }}
-          className="m-3 rounded-xl bg-[var(--app-primary)] px-3 py-2 text-left text-sm text-[var(--app-primary-text)]"
+          className="mx-3 mt-3 rounded-xl bg-[var(--app-primary)] px-3 py-2.5 text-left text-sm font-medium text-[var(--app-primary-text)] shadow-[var(--surface-shadow)] hover:opacity-95"
         >
           New Chat
         </button>
@@ -141,7 +141,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             placeholder="Search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            className="w-full rounded-xl border border-[var(--app-border)] bg-transparent px-3 py-2 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
+            className="w-full rounded-xl border border-[var(--app-border)] bg-[var(--subtle-bg)]/40 px-3 py-2.5 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
           />
         </div>
 
@@ -150,7 +150,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             groupedChats.map(([label, items]) => (
               <div key={label} className="mb-4">
                 <p className="mb-2 text-xs text-[var(--app-text-soft)]">{label}</p>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {items.map((chat) => {
                     const isActive = selectedChat?._id === chat._id;
 
@@ -163,9 +163,9 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                             navigate("/");
                             closeSidebar();
                           }}
-                          className={`min-w-0 flex-1 rounded-xl border px-3 py-2 text-left text-sm text-[var(--app-text)] ${
+                          className={`min-w-0 flex-1 rounded-xl border px-3 py-2.5 text-left text-sm text-[var(--app-text)] ${
                             isActive
-                              ? "border-[var(--app-border-strong)] bg-[var(--active-bg)]"
+                              ? "border-[var(--app-border-strong)] bg-[var(--active-bg)] shadow-[var(--surface-shadow)]"
                               : "border-transparent hover:border-[var(--app-border)] hover:bg-[var(--subtle-bg)]"
                           }`}
                         >
@@ -194,13 +194,13 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
           )}
         </div>
 
-        <div className="border-t border-[var(--app-border)] p-3">
+        <div className="border-t border-[var(--app-border)] p-4">
           <p className="truncate text-sm text-[var(--app-text)]">{user?.name}</p>
           <p className="mb-3 truncate text-xs text-[var(--app-text-soft)]">{user?.email}</p>
           <button
             type="button"
             onClick={logout}
-            className="w-full rounded-xl border border-[var(--app-border)] px-3 py-2 text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
+            className="w-full rounded-xl border border-[var(--app-border)] px-3 py-2.5 text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
           >
             Logout
           </button>
