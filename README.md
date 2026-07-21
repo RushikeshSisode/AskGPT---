@@ -198,6 +198,4 @@ Render is a strong choice for this project because it works well with separate f
 - Payment flow depends on valid Razorpay credentials
 - Text chat depends on a working Gemini key and supported model name
 
-## License
 
-This project is currently unlicensed unless you add a license file.
