@@ -38,11 +38,17 @@ body,
   font-family: Arial, Helvetica, sans-serif;
 }
 
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
   margin: 0;
   color: var(--app-text);
   background: var(--app-bg);
   line-height: 1.5;
+  letter-spacing: -0.01em;
 }
 
 html.light {
@@ -99,6 +105,10 @@ textarea:focus-visible {
   box-shadow: var(--focus-ring);
 }
 
+button:disabled {
+  transform: none;
+}
+
 input[type="checkbox"] {
   accent-color: var(--app-primary);
 }
@@ -135,6 +145,10 @@ textarea {
   border: 1px solid var(--app-border);
   background: var(--app-card);
   box-shadow: var(--surface-shadow);
+}
+
+.page-title {
+  letter-spacing: -0.03em;
 }
 
 .markdown-body {

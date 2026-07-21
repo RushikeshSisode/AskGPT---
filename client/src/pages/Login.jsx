@@ -45,9 +45,9 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 text-black">
-      <div className="w-full max-w-md rounded-2xl border border-[#d9d9d9] bg-white px-8 py-10 sm:px-10">
+      <div className="w-full max-w-md rounded-2xl border border-[#d9d9d9] bg-white px-8 py-10 shadow-[0_10px_30px_rgba(15,23,42,0.06)] sm:px-10">
         <div className="text-center">
-          <h1 className="text-4xl font-normal text-black">
+          <h1 className="page-title text-4xl font-normal text-black">
             {isLogin ? "Sign in" : "Sign up"}
           </h1>
           <p className="mt-2 text-sm text-[#666666]">
@@ -55,7 +55,7 @@ const Login = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-10 space-y-8">
+        <form onSubmit={handleSubmit} className="mt-10 space-y-7">
           {!isLogin && (
             <div>
               <label className="mb-2 block text-sm text-[#666666]">Name</label>
@@ -65,7 +65,7 @@ const Login = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2 text-base text-black outline-none"
+                className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2.5 text-base text-black outline-none"
               />
             </div>
           )}
@@ -78,7 +78,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2 text-base text-black outline-none"
+              className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2.5 text-base text-black outline-none"
             />
           </div>
 
@@ -90,14 +90,14 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2 text-base text-black outline-none"
+              className="w-full border-0 border-b border-[#cfcfcf] bg-transparent px-0 py-2.5 text-base text-black outline-none"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-[#1976d2] px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-[#1976d2] px-4 py-3 text-sm font-medium text-white shadow-[0_10px_24px_rgba(25,118,210,0.18)] hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Please wait..." : isLogin ? "Sign in" : "Sign up"}
           </button>
