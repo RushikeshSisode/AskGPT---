@@ -45,7 +45,7 @@ const Credits = () => {
         key: razorpay_key,
         amount: amount * 100,
         currency: "INR",
-        name: "AskVision",
+        name: "AskGPT",
         description: "Credit Purchase",
         order_id: orderId,
         handler: async (paymentResponse) => {
@@ -66,7 +66,7 @@ const Credits = () => {
             toast.success("Credits added successfully.");
           }
         },
-        theme: { color: "#3B82F6" },
+        theme: { color: "#1976D2" },
       };
 
       const razorpay = new window.Razorpay(options);
@@ -80,48 +80,52 @@ const Credits = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="h-full overflow-y-auto px-4 py-5 sm:px-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="h-full overflow-y-auto px-6 py-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">
+            <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Billing
             </p>
-            <h1 className="mt-2 text-3xl font-semibold text-white">Upgrade your workspace</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
-              Purchase credits for text and image generation without leaving your workflow.
+            <h1 className="mt-2 text-3xl font-medium text-[var(--app-text)]">Credits</h1>
+            <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
+              Choose a plan to add more credits.
             </p>
           </div>
 
-          <div className="app-card rounded-[24px] px-5 py-4">
-            <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Available credits</p>
-            <p className="mt-2 text-3xl font-semibold text-white">{user?.credits ?? 0}</p>
+          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4">
+            <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+              Available credits
+            </p>
+            <p className="mt-2 text-3xl font-medium text-[var(--app-text)]">
+              {user?.credits ?? 0}
+            </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan._id} className="app-card rounded-[28px] p-6">
+            <div key={plan._id} className="border border-[var(--app-border)] bg-[var(--app-card)] p-6">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="text-2xl font-semibold text-white">{plan.name}</h3>
-                  <p className="mt-2 text-sm text-slate-400">{plan.credits} generation credits</p>
+                  <h3 className="text-2xl font-medium text-[var(--app-text)]">{plan.name}</h3>
+                  <p className="mt-2 text-sm text-[var(--app-text-soft)]">
+                    {plan.credits} generation credits
+                  </p>
                 </div>
-                <span className="rounded-full border border-blue-400/25 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-200">
-                  ₹{plan.price}
+                <span className="border border-[var(--app-border)] px-3 py-1 text-xs text-[var(--app-primary)]">
+                  Rs. {plan.price}
                 </span>
               </div>
 
-              <p className="mb-6 text-sm leading-7 text-slate-400">
-                Ideal for users who want reliable access to premium AI responses and image generation.
+              <p className="mb-6 text-sm text-[var(--app-text-soft)]">
+                Suitable for regular AI text and image usage.
               </p>
 
-              <ul className="mb-6 space-y-3 text-sm text-slate-300">
+              <ul className="mb-6 space-y-3 text-sm text-[var(--app-text)]">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
-                    <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-300">
-                      ✓
-                    </span>
+                    <span className="mt-0.5 text-[var(--app-primary)]">+</span>
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -129,9 +133,9 @@ const Credits = () => {
 
               <button
                 onClick={() => buyPlan(plan._id)}
-                className="app-button app-button-primary w-full rounded-2xl px-4 py-3 text-sm font-semibold"
+                className="w-full bg-[var(--app-primary)] px-4 py-3 text-sm font-medium text-[var(--app-primary-text)]"
               >
-                Buy Now
+                Buy plan
               </button>
             </div>
           ))}

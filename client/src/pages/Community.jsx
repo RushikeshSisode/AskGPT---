@@ -27,20 +27,20 @@ const Community = () => {
   if (loading) return <Loading />;
 
   return (
-    <div className="h-full overflow-y-auto px-4 py-5 sm:px-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="h-full overflow-y-auto px-6 py-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">
+            <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Gallery
             </p>
-            <h1 className="mt-2 text-3xl font-semibold text-white">Community images</h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-400">
-              Explore published image generations from your workspace community.
+            <h1 className="mt-2 text-3xl font-medium text-[var(--app-text)]">Community</h1>
+            <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
+              Published images from users.
             </p>
           </div>
-          <div className="app-card rounded-[24px] px-5 py-4 text-sm text-slate-300">
-            {images.length} published {images.length === 1 ? "image" : "images"}
+          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)]">
+            {images.length} {images.length === 1 ? "image" : "images"}
           </div>
         </div>
 
@@ -52,33 +52,26 @@ const Community = () => {
                 href={item.imageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="app-card group block overflow-hidden rounded-[28px] p-3 transition duration-200 hover:-translate-y-1 hover:border-white/16"
+                className="block border border-[var(--app-border)] bg-[var(--app-card)] p-3"
               >
-                <div className="overflow-hidden rounded-[22px]">
-                  <img
-                    src={item.imageUrl}
-                    alt="Community"
-                    className="h-72 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-                  />
-                </div>
+                <img
+                  src={item.imageUrl}
+                  alt="Community"
+                  className="h-72 w-full object-cover"
+                />
 
-                <div className="flex items-center justify-between gap-3 px-1 pb-1 pt-4">
-                  <div>
-                    <p className="text-sm font-medium text-slate-100">{item.userName || "Anonymous"}</p>
-                    <p className="mt-1 text-xs text-slate-500">Open full resolution</p>
-                  </div>
-                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-400">
-                    Published
-                  </div>
+                <div className="pt-4">
+                  <p className="text-sm text-[var(--app-text)]">{item.userName || "Anonymous"}</p>
+                  <p className="mt-1 text-xs text-[var(--app-text-soft)]">Open full image</p>
                 </div>
               </a>
             ))}
           </div>
         ) : (
-          <div className="app-card rounded-[28px] px-6 py-10 text-center">
-            <p className="text-lg font-medium text-white">No images available yet</p>
-            <p className="mt-2 text-sm text-slate-400">
-              Generate an image and publish it to make the gallery come alive.
+          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-6 py-10 text-center">
+            <p className="text-lg text-[var(--app-text)]">No images available yet</p>
+            <p className="mt-2 text-sm text-[var(--app-text-soft)]">
+              Generate and publish an image to show it here.
             </p>
           </div>
         )}

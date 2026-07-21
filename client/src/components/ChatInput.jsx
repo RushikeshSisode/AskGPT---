@@ -81,7 +81,7 @@ const ChatInput = ({
           <button
             type="submit"
             disabled={disabled || !value.trim()}
-            className="border border-[var(--app-border-strong)] bg-[var(--app-text)] px-4 py-2 text-sm text-[var(--chat-bg)] disabled:cursor-not-allowed disabled:opacity-40"
+            className="bg-[var(--app-primary)] px-4 py-2 text-sm text-[var(--app-primary-text)] disabled:cursor-not-allowed disabled:opacity-40"
             aria-label={mode === "image" ? "Generate image" : "Send message"}
           >
             {mode === "image" ? "Generate" : "Send"}

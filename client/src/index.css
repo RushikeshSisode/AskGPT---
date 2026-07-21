@@ -18,6 +18,8 @@
   --app-border-strong: #3a3a3a;
   --app-text: #ffffff;
   --app-text-soft: #a3a3a3;
+  --app-primary: #1976d2;
+  --app-primary-text: #ffffff;
 }
 
 html,
@@ -35,6 +37,7 @@ body {
   margin: 0;
   color: var(--app-text);
   background: var(--app-bg);
+  line-height: 1.5;
 }
 
 html.light {
@@ -52,6 +55,8 @@ html.light {
   --app-border-strong: #cfcfcf;
   --app-text: #000000;
   --app-text-soft: #666666;
+  --app-primary: #1976d2;
+  --app-primary-text: #ffffff;
 }
 
 html.light body {
@@ -71,6 +76,10 @@ button {
 input,
 textarea {
   color: var(--app-text);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--app-primary);
 }
 
 textarea {

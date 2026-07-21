@@ -130,7 +130,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             navigate("/");
             closeSidebar();
           }}
-          className="m-3 border border-[var(--app-border)] px-3 py-2 text-left text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
+          className="m-3 bg-[var(--app-primary)] px-3 py-2 text-left text-sm text-[var(--app-primary-text)]"
         >
           New Chat
         </button>
