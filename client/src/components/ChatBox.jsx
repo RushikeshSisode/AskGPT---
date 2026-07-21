@@ -103,7 +103,7 @@ const ChatBox = () => {
 
   return (
     <div className="flex h-full min-w-0 flex-col bg-[var(--chat-bg)]">
-      <div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--app-border)] px-4 md:px-6">
+      <div className="mx-4 mt-4 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-[var(--app-border)] px-4 md:mx-6 md:px-6">
         <h2 className="truncate pl-11 text-sm font-medium text-[var(--app-text)] md:pl-0">
           {selectedChat?.chatname || "New Chat"}
         </h2>

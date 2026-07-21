@@ -93,7 +93,7 @@ const Credits = () => {
             </p>
           </div>
 
-          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4">
             <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Available credits
             </p>
@@ -105,7 +105,7 @@ const Credits = () => {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan._id} className="border border-[var(--app-border)] bg-[var(--app-card)] p-6">
+            <div key={plan._id} className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-6">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-2xl font-medium text-[var(--app-text)]">{plan.name}</h3>
@@ -113,7 +113,7 @@ const Credits = () => {
                     {plan.credits} generation credits
                   </p>
                 </div>
-                <span className="border border-[var(--app-border)] px-3 py-1 text-xs text-[var(--app-primary)]">
+                <span className="rounded-xl border border-[var(--app-border)] px-3 py-1 text-xs text-[var(--app-primary)]">
                   Rs. {plan.price}
                 </span>
               </div>
@@ -133,7 +133,7 @@ const Credits = () => {
 
               <button
                 onClick={() => buyPlan(plan._id)}
-                className="w-full bg-[var(--app-primary)] px-4 py-3 text-sm font-medium text-[var(--app-primary-text)]"
+                className="w-full rounded-xl bg-[var(--app-primary)] px-4 py-3 text-sm font-medium text-[var(--app-primary-text)]"
               >
                 Buy plan
               </button>

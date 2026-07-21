@@ -105,7 +105,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             <button
               type="button"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="border border-[var(--app-border)] px-3 py-1 text-sm text-[var(--app-text)]"
+              className="rounded-xl border border-[var(--app-border)] px-3 py-1 text-sm text-[var(--app-text)]"
             >
               {theme === "dark" ? "Light" : "Dark"}
             </button>
@@ -113,7 +113,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             <button
               type="button"
               onClick={closeSidebar}
-              className="flex h-9 w-9 items-center justify-center border border-[var(--app-border)] text-[var(--app-text)] md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--app-border)] text-[var(--app-text)] md:hidden"
               aria-label="Close sidebar"
             >
               <svg viewBox="0 0 24 24" fill="none" className="h-4.5 w-4.5" stroke="currentColor">
@@ -130,7 +130,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             navigate("/");
             closeSidebar();
           }}
-          className="m-3 bg-[var(--app-primary)] px-3 py-2 text-left text-sm text-[var(--app-primary-text)]"
+          className="m-3 rounded-xl bg-[var(--app-primary)] px-3 py-2 text-left text-sm text-[var(--app-primary-text)]"
         >
           New Chat
         </button>
@@ -141,7 +141,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
             placeholder="Search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            className="w-full border border-[var(--app-border)] bg-transparent px-3 py-2 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
+            className="w-full rounded-xl border border-[var(--app-border)] bg-transparent px-3 py-2 text-sm text-[var(--app-text)] outline-none placeholder:text-[var(--app-text-soft)]"
           />
         </div>
 
@@ -163,7 +163,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                             navigate("/");
                             closeSidebar();
                           }}
-                          className={`min-w-0 flex-1 border px-3 py-2 text-left text-sm text-[var(--app-text)] ${
+                          className={`min-w-0 flex-1 rounded-xl border px-3 py-2 text-left text-sm text-[var(--app-text)] ${
                             isActive
                               ? "border-[var(--app-border-strong)] bg-[var(--active-bg)]"
                               : "border-transparent hover:border-[var(--app-border)] hover:bg-[var(--subtle-bg)]"
@@ -178,7 +178,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                         <button
                           type="button"
                           onClick={() => deleteChat(chat._id)}
-                          className="border border-[var(--app-border)] px-3 py-2 text-xs text-[var(--app-text-soft)] hover:bg-[var(--subtle-bg)]"
+                          className="rounded-xl border border-[var(--app-border)] px-3 py-2 text-xs text-[var(--app-text-soft)] hover:bg-[var(--subtle-bg)]"
                           aria-label="Delete conversation"
                         >
                           Delete
@@ -200,7 +200,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
           <button
             type="button"
             onClick={logout}
-            className="w-full border border-[var(--app-border)] px-3 py-2 text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
+            className="w-full rounded-xl border border-[var(--app-border)] px-3 py-2 text-sm text-[var(--app-text)] hover:bg-[var(--subtle-bg)]"
           >
             Logout
           </button>

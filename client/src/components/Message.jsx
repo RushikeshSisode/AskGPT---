@@ -66,14 +66,14 @@ const Message = ({ message }) => {
       <div
         className={`max-w-[min(88%,820px)] text-[var(--app-text)] ${
           isUser
-            ? "border border-[var(--app-border)] bg-[var(--user-message-bg)] px-4 py-3"
-            : "min-w-0 flex-1 px-0 py-0"
+            ? "rounded-2xl border border-[var(--app-border)] bg-[var(--user-message-bg)] px-4 py-3"
+            : "min-w-0 flex-1 rounded-2xl px-0 py-0"
         }`}
       >
         {message.isImage ? (
           <img
             src={message.content}
-            className="max-h-[26rem] w-full border border-[var(--app-border)] object-cover"
+            className="max-h-[26rem] w-full rounded-2xl border border-[var(--app-border)] object-cover"
             alt="Generated output"
           />
         ) : (

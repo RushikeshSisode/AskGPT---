@@ -45,7 +45,7 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10 text-black">
-      <div className="w-full max-w-md border border-[#d9d9d9] bg-white px-8 py-10 sm:px-10">
+      <div className="w-full max-w-md rounded-2xl border border-[#d9d9d9] bg-white px-8 py-10 sm:px-10">
         <div className="text-center">
           <h1 className="text-4xl font-normal text-black">
             {isLogin ? "Sign in" : "Sign up"}
@@ -97,7 +97,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1976d2] px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-xl bg-[#1976d2] px-4 py-3 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Please wait..." : isLogin ? "Sign in" : "Sign up"}
           </button>

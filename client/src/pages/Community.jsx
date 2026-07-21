@@ -39,7 +39,7 @@ const Community = () => {
               Published images from users.
             </p>
           </div>
-          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)]">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)]">
             {images.length} {images.length === 1 ? "image" : "images"}
           </div>
         </div>
@@ -52,12 +52,12 @@ const Community = () => {
                 href={item.imageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block border border-[var(--app-border)] bg-[var(--app-card)] p-3"
+                className="block rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-3"
               >
                 <img
                   src={item.imageUrl}
                   alt="Community"
-                  className="h-72 w-full object-cover"
+                  className="h-72 w-full rounded-xl object-cover"
                 />
 
                 <div className="pt-4">
@@ -68,7 +68,7 @@ const Community = () => {
             ))}
           </div>
         ) : (
-          <div className="border border-[var(--app-border)] bg-[var(--app-card)] px-6 py-10 text-center">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-6 py-10 text-center">
             <p className="text-lg text-[var(--app-text)]">No images available yet</p>
             <p className="mt-2 text-sm text-[var(--app-text-soft)]">
               Generate and publish an image to show it here.
