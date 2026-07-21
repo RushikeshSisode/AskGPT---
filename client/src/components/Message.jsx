@@ -25,27 +25,27 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
 
   if (inline) {
     return (
-      <code className="rounded-full border border-white/10 bg-slate-950/70 px-2 py-1 text-[13px] text-blue-200">
+      <code className="rounded border border-[var(--app-border)] bg-[var(--subtle-bg)] px-2 py-0.5 text-[13px] text-[var(--app-text)]">
         {children}
       </code>
     );
   }
 
   return (
-    <div className="my-4 overflow-hidden rounded-xl border border-[var(--app-border)] bg-[#0d0d0d]">
-      <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-4 py-2.5">
-        <span className="text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
+    <div className="my-4 overflow-hidden border border-[var(--app-border)] bg-[var(--subtle-bg)]">
+      <div className="flex items-center justify-between border-b border-[var(--app-border)] px-4 py-2.5">
+        <span className="text-xs uppercase text-[var(--app-text-soft)]">
           {language}
         </span>
         <button
           type="button"
           onClick={handleCopy}
-          className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300 transition hover:bg-white/10"
+          className="border border-[var(--app-border)] px-3 py-1 text-xs text-[var(--app-text)] transition hover:bg-[var(--active-bg)]"
         >
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="overflow-x-auto px-4 py-4 text-sm text-slate-100">
+      <pre className="overflow-x-auto px-4 py-4 text-sm text-[var(--app-text)]">
         <code className={match ? `language-${language}` : className} {...props}>
           {codeText}
         </code>
@@ -56,31 +56,24 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
 
 const Message = ({ message }) => {
   const isUser = message.role === "user";
-  const userInitial = message.role === "user" ? "U" : "AI";
 
   useEffect(() => {
     Prism.highlightAll();
   }, [message.content]);
 
   return (
-    <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
-      {!isUser && (
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--app-border-strong)] bg-[var(--subtle-bg)] text-[11px] font-semibold text-[var(--app-text)]">
-          A
-        </div>
-      )}
-
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[min(88%,820px)] text-[var(--app-text)] ${
           isUser
-            ? "rounded-[20px] bg-[var(--user-message-bg)] px-4 py-2.5"
-            : "min-w-0 flex-1 px-1 py-1"
+            ? "border border-[var(--app-border)] bg-[var(--user-message-bg)] px-4 py-3"
+            : "min-w-0 flex-1 px-0 py-0"
         }`}
       >
         {message.isImage ? (
           <img
             src={message.content}
-            className="max-h-[26rem] w-full rounded-[18px] border border-white/10 object-cover"
+            className="max-h-[26rem] w-full border border-[var(--app-border)] object-cover"
             alt="Generated output"
           />
         ) : (
@@ -96,9 +89,10 @@ const Message = ({ message }) => {
           </div>
         )}
 
-        {isUser && <div className="mt-1 text-right text-[10px] text-[var(--app-text-soft)]">{moment(message.timestamp).fromNow()}</div>}
+        <div className={`mt-2 text-[10px] text-[var(--app-text-soft)] ${isUser ? "text-right" : "text-left"}`}>
+          {moment(message.timestamp).fromNow()}
+        </div>
       </div>
-
     </div>
   );
 };

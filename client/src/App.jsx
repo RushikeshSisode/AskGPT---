@@ -26,10 +26,11 @@ const App = () => {
         position="top-right"
         toastOptions={{
           style: {
-            background: "#111827",
-            color: "#F9FAFB",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "18px",
+            background: "var(--app-bg)",
+            color: "var(--app-text)",
+            border: "1px solid var(--app-border)",
+            borderRadius: "6px",
+            boxShadow: "none",
           },
         }}
       />
@@ -38,7 +39,7 @@ const App = () => {
         <button
           type="button"
           aria-label="Open menu"
-          className="fixed left-4 top-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-slate-900/85 text-slate-200 shadow-lg backdrop-blur md:hidden"
+          className="fixed left-3 top-3 z-40 inline-flex h-10 w-10 items-center justify-center border border-[var(--app-border)] bg-[var(--app-bg)] text-[var(--app-text)] md:hidden"
           onClick={() => setIsMenuOpen(true)}
         >
           <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" stroke="currentColor">
