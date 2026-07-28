@@ -70,6 +70,9 @@ const Message = ({ message }) => {
             : "min-w-0 flex-1 rounded-2xl px-0 py-0"
         }`}
       >
+        <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+          {isUser ? "You" : "AskGPT"}
+        </p>
         {message.isImage ? (
           <img
             src={message.content}

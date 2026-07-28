@@ -9,7 +9,7 @@ import TypingIndicator from "./TypingIndicator";
 import API_BASE_URL from "../config/apiBaseUrl";
 
 const ChatBox = () => {
-  const { selectedChat, setSelectedChat, setChats, createNewChat, user } = useAppContext();
+  const { selectedChat, setSelectedChat, setChats, createNewChat } = useAppContext();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("text");
@@ -103,13 +103,18 @@ const ChatBox = () => {
 
   return (
     <div className="flex h-full min-w-0 flex-col bg-[var(--chat-bg)]">
-      <div className="mx-4 mt-4 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-4 shadow-[var(--surface-shadow)] md:mx-6 md:px-6">
-        <h2 className="truncate pl-11 text-sm font-medium text-[var(--app-text)] md:pl-0">
-          {selectedChat?.chatname || "New Chat"}
-        </h2>
+      <div className="mx-4 mt-4 flex h-16 shrink-0 items-center justify-between rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-4 shadow-[var(--surface-shadow)] md:mx-6 md:px-6">
+        <div className="min-w-0 pl-11 md:pl-0">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+            Workspace
+          </p>
+          <h2 className="truncate text-sm font-medium text-[var(--app-text)]">
+            {selectedChat?.chatname || "New Chat"}
+          </h2>
+        </div>
 
         <span className="rounded-full bg-[var(--subtle-bg)] px-2.5 py-1 text-xs text-[var(--app-text-soft)]">
-          {user?.name || "User"}
+          {mode === "image" ? "Image mode" : "Text mode"}
         </span>
       </div>
 

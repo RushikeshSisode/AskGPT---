@@ -1,8 +1,14 @@
 import { useMemo, useState } from "react";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config/apiBaseUrl";
 import { useAppContext } from "../context/AppContext";
+
+const navItems = [
+  { label: "Workspace", path: "/" },
+  { label: "Community", path: "/community" },
+  { label: "Credits", path: "/credits" },
+];
 
 const groupChats = (chats) => {
   const groups = {
@@ -30,6 +36,7 @@ const groupChats = (chats) => {
 
 const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const {
     chats,
     setChats,
@@ -97,9 +104,12 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
         }`}
       >
         <div className="flex items-center justify-between border-b border-[var(--app-border)] p-4">
-          <button type="button" onClick={() => handleMenuClick("/")} className="text-left text-base font-medium text-[var(--app-text)]">
-            AskGPT
-          </button>
+          <div>
+            <button type="button" onClick={() => handleMenuClick("/")} className="text-left text-base font-medium text-[var(--app-text)]">
+              AskGPT
+            </button>
+            <p className="mt-1 text-xs text-[var(--app-text-soft)]">AI workspace</p>
+          </div>
 
           <div className="flex items-center gap-2">
             <button
@@ -145,11 +155,39 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
           />
         </div>
 
+        <div className="px-3 pb-3">
+          <p className="mb-2 px-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+            Pages
+          </p>
+          <div className="space-y-1.5">
+            {navItems.map((item) => {
+              const isActive = pathname === item.path;
+
+              return (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => handleMenuClick(item.path)}
+                  className={`w-full rounded-xl border px-3 py-2.5 text-left text-sm ${
+                    isActive
+                      ? "border-[var(--app-border-strong)] bg-[var(--active-bg)] text-[var(--app-text)]"
+                      : "border-transparent text-[var(--app-text-soft)] hover:border-[var(--app-border)] hover:bg-[var(--subtle-bg)] hover:text-[var(--app-text)]"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="flex-1 overflow-y-auto px-3 pb-3">
           {groupedChats.length > 0 ? (
             groupedChats.map(([label, items]) => (
               <div key={label} className="mb-4">
-                <p className="mb-2 text-xs text-[var(--app-text-soft)]">{label}</p>
+                <p className="mb-2 px-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+                  {label}
+                </p>
                 <div className="space-y-1.5">
                   {items.map((chat) => {
                     const isActive = selectedChat?._id === chat._id;
@@ -169,7 +207,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
                               : "border-transparent hover:border-[var(--app-border)] hover:bg-[var(--subtle-bg)]"
                           }`}
                         >
-                          <span className="block truncate">{chat.chatname || "New Chat"}</span>
+                          <span className="block truncate font-medium">{chat.chatname || "New Chat"}</span>
                           <span className="mt-1 block text-xs text-[var(--app-text-soft)]">
                             {moment(chat.updatedAt).fromNow()}
                           </span>
@@ -190,13 +228,22 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen }) => {
               </div>
             ))
           ) : (
-            <p className="text-sm text-[var(--app-text-soft)]">No chats yet.</p>
+            <div className="rounded-xl border border-dashed border-[var(--app-border)] px-4 py-4 text-sm text-[var(--app-text-soft)]">
+              No chats yet. Start a new chat to begin.
+            </div>
           )}
         </div>
 
         <div className="border-t border-[var(--app-border)] p-4">
-          <p className="truncate text-sm text-[var(--app-text)]">{user?.name}</p>
-          <p className="mb-3 truncate text-xs text-[var(--app-text-soft)]">{user?.email}</p>
+          <div className="mb-3 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--subtle-bg)] text-sm font-medium text-[var(--app-text)]">
+              {user?.name?.slice(0, 1)?.toUpperCase() || "U"}
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-[var(--app-text)]">{user?.name}</p>
+              <p className="truncate text-xs text-[var(--app-text-soft)]">{user?.email}</p>
+            </div>
+          </div>
           <button
             type="button"
             onClick={logout}

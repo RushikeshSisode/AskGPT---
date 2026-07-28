@@ -34,12 +34,12 @@ const Community = () => {
             <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Gallery
             </p>
-            <h1 className="mt-2 text-3xl font-medium text-[var(--app-text)]">Community</h1>
+            <h1 className="page-title mt-2 text-3xl font-medium text-[var(--app-text)]">Community</h1>
             <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
               Published images from users.
             </p>
           </div>
-          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)]">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)] shadow-[var(--surface-shadow)]">
             {images.length} {images.length === 1 ? "image" : "images"}
           </div>
         </div>
@@ -52,7 +52,7 @@ const Community = () => {
                 href={item.imageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-3"
+                className="block rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-3 shadow-[var(--surface-shadow)] transition hover:-translate-y-0.5"
               >
                 <img
                   src={item.imageUrl}
@@ -68,7 +68,7 @@ const Community = () => {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-6 py-10 text-center">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-6 py-10 text-center shadow-[var(--surface-shadow)]">
             <p className="text-lg text-[var(--app-text)]">No images available yet</p>
             <p className="mt-2 text-sm text-[var(--app-text-soft)]">
               Generate and publish an image to show it here.

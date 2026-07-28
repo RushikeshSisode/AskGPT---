@@ -87,13 +87,13 @@ const Credits = () => {
             <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Billing
             </p>
-            <h1 className="mt-2 text-3xl font-medium text-[var(--app-text)]">Credits</h1>
+            <h1 className="page-title mt-2 text-3xl font-medium text-[var(--app-text)]">Credits</h1>
             <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
               Choose a plan to add more credits.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4">
+          <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 shadow-[var(--surface-shadow)]">
             <p className="text-xs uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
               Available credits
             </p>
@@ -105,7 +105,7 @@ const Credits = () => {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {plans.map((plan) => (
-            <div key={plan._id} className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-6">
+            <div key={plan._id} className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] p-6 shadow-[var(--surface-shadow)]">
               <div className="mb-6 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-2xl font-medium text-[var(--app-text)]">{plan.name}</h3>
