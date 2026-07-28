@@ -89,7 +89,7 @@ const Credits = () => {
             </p>
             <h1 className="page-title mt-2 text-3xl font-medium text-[var(--app-text)]">Credits</h1>
             <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
-              Choose a plan to add more credits.
+              Add credits for text prompts and image generations.
             </p>
           </div>
 
@@ -119,7 +119,7 @@ const Credits = () => {
               </div>
 
               <p className="mb-6 text-sm text-[var(--app-text-soft)]">
-                Suitable for regular AI text and image usage.
+                Best for teams and individuals who use AI throughout the day.
               </p>
 
               <ul className="mb-6 space-y-3 text-sm text-[var(--app-text)]">

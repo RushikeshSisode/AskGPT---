@@ -36,7 +36,7 @@ const Community = () => {
             </p>
             <h1 className="page-title mt-2 text-3xl font-medium text-[var(--app-text)]">Community</h1>
             <p className="mt-3 max-w-2xl text-sm text-[var(--app-text-soft)]">
-              Published images from users.
+              Browse image generations that users chose to publish.
             </p>
           </div>
           <div className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-5 py-4 text-sm text-[var(--app-text)] shadow-[var(--surface-shadow)]">
@@ -61,8 +61,8 @@ const Community = () => {
                 />
 
                 <div className="pt-4">
-                  <p className="text-sm text-[var(--app-text)]">{item.userName || "Anonymous"}</p>
-                  <p className="mt-1 text-xs text-[var(--app-text-soft)]">Open full image</p>
+                  <p className="text-sm font-medium text-[var(--app-text)]">{item.userName || "Anonymous"}</p>
+                  <p className="mt-1 text-xs text-[var(--app-text-soft)]">View full image</p>
                 </div>
               </a>
             ))}

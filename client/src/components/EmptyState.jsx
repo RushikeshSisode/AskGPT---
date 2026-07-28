@@ -13,7 +13,7 @@ const EmptyState = ({ onSelectSuggestion }) => {
       </div>
       <h1 className="page-title mt-5 text-3xl font-medium text-[var(--app-text)]">Start a conversation</h1>
       <p className="mt-3 max-w-lg text-sm leading-7 text-[var(--app-text-soft)]">
-        Ask a question, generate an image, or use one of the suggestions below.
+        Use AskGPT for writing, research, explanations, and image prompts.
       </p>
 
       <div className="mt-8 grid w-full max-w-2xl gap-3 sm:grid-cols-2">
@@ -24,6 +24,9 @@ const EmptyState = ({ onSelectSuggestion }) => {
             onClick={() => onSelectSuggestion(suggestion)}
             className="rounded-2xl border border-[var(--app-border)] bg-[var(--app-card)] px-4 py-4 text-left shadow-[var(--surface-shadow)] transition hover:bg-[var(--subtle-bg)]"
           >
+            <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
+              Prompt
+            </p>
             <p className="text-sm leading-6 text-[var(--app-text)]">{suggestion}</p>
           </button>
         ))}

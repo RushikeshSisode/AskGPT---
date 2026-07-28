@@ -7,7 +7,7 @@ const TypingIndicator = ({ mode }) => {
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--app-text-soft)] [animation-delay:-0.15s]" />
           <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--app-text-soft)]" />
         </div>
-        <span className="text-sm">{mode === "image" ? "Generating image..." : "Thinking..."}</span>
+        <span className="text-sm">{mode === "image" ? "Generating image response..." : "Generating response..."}</span>
       </div>
     </div>
   );

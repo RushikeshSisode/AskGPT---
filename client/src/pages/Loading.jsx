@@ -9,17 +9,22 @@ const Loading = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       navigate(user ? "/" : "/login");
-    }, 1500);
+    }, 1200);
 
     return () => clearTimeout(timeout);
   }, [navigate, user]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-6">
-      <div className="glass-panel flex w-full max-w-sm flex-col items-center rounded-[32px] px-8 py-10 text-center">
-        <div className="app-skeleton h-14 w-14 rounded-3xl" />
-        <div className="app-skeleton mt-6 h-4 w-28 rounded-full" />
-        <div className="app-skeleton mt-3 h-3 w-44 rounded-full" />
+    <div className="flex min-h-screen items-center justify-center bg-[var(--app-bg)] px-6">
+      <div className="surface-card w-full max-w-sm rounded-2xl px-8 py-10 text-center">
+        <div className="mx-auto h-12 w-12 animate-pulse rounded-2xl bg-[var(--subtle-bg)]" />
+        <p className="mt-5 text-sm font-medium text-[var(--app-text)]">Preparing your workspace</p>
+        <p className="mt-2 text-sm text-[var(--app-text-soft)]">
+          Loading chats, credits, and recent activity.
+        </p>
+        <div className="mt-6 h-1.5 overflow-hidden rounded-full bg-[var(--subtle-bg)]">
+          <div className="h-full w-2/3 animate-pulse rounded-full bg-[var(--app-primary)]" />
+        </div>
       </div>
     </div>
   );
