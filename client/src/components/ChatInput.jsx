@@ -27,7 +27,7 @@ const ChatInput = ({
 
   return (
     <div>
-      <div className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-[var(--composer-bg)] shadow-[var(--surface-shadow)]">
+      <div className="overflow-hidden rounded-2xl border border-black bg-[var(--composer-bg)] shadow-[var(--surface-shadow)]">
         <div className="flex flex-wrap items-center gap-2 border-b border-[var(--app-border)] px-3 py-3">
           <span className="mr-1 text-[11px] font-medium uppercase tracking-[0.18em] text-[var(--app-text-soft)]">
             Create
